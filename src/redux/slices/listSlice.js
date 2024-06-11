@@ -2,13 +2,6 @@ import { createSlice } from "@reduxjs/toolkit";
 
 const initialState = [
   {
-    id: "25600f72-56b4-41a7-a9c2-47358580e2f8",
-    date: "2024-01-05",
-    type: "식비",
-    price: 100000,
-    detail: "세광양대창",
-  },
-  {
     id: "25600f72-53b4-4187-a9c2-47358580e2f8",
     date: "2024-01-10",
     type: "도서",

@@ -1,6 +1,7 @@
 import { Link } from "react-router-dom";
 import styled from "styled-components";
-import { useSelector } from "react-redux";
+import { useQuery } from "@tanstack/react-query";
+import { fetchExpense } from "../axios/expenseApi";
 
 const StUl = styled.ul`
   max-width: 1200px;
@@ -56,8 +57,22 @@ const StSpan = styled.span`
 `;
 
 export default function ExpenseList({ selectedMonth }) {
-  const list = useSelector((state) => state.list);
-  const monthList = [...list].filter((el) => {
+  const {
+    data: expense,
+    isPending,
+    isError,
+  } = useQuery({
+    queryKey: ["expense"],
+    queryFn: fetchExpense,
+  });
+  if (isPending) {
+    return <div>로딩중입니다...</div>;
+  }
+  if (isError) {
+    return <div>데이터 조회중 오류가 발생했습니다!</div>;
+  }
+
+  const monthList = expense.filter((el) => {
     return el.date.slice(5, 7) === selectedMonth;
   });
   return (
