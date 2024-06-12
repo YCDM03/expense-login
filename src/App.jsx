@@ -2,6 +2,7 @@ import Router from "./shared/Router";
 import GlobalStyle from "./Globalstyle";
 import { useQuery } from "@tanstack/react-query";
 import { fetchExpense } from "./axios/expenseApi";
+import Header from "./components/layout/Header";
 
 function App() {
   const { data, isPending, isError } = useQuery({

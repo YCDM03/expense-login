@@ -1,62 +1,50 @@
-// import { useMutation } from "@tanstack/react-query";
-import axios from "axios";
-import { useDispatch, useSelector } from "react-redux";
-import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
-import { login } from "../redux/slices/loginSlice";
+import { v4 as uuidv4 } from "uuid";
+import axios from "axios";
+import { useNavigate } from "react-router-dom";
 
-const Login = () => {
-  const dispatch = useDispatch();
+// registerMutate(id);
+const Register = () => {
   const navigate = useNavigate();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     const formData = new FormData(e.target);
+    const nickname = formData.get("nickname");
     const id = formData.get("id");
     const password = formData.get("password");
 
     try {
       const response = await axios.post(
-        "https://moneyfulpublicpolicy.co.kr/login",
-        { id, password }
+        "https://moneyfulpublicpolicy.co.kr/register",
+        { id, password, nickname }
       );
       const data = response.data;
       if (data.success) {
-        alert("Login Success!");
-        dispatch(login(data.accessToken));
+        alert("success");
         navigate("/");
       }
     } catch (error) {
-      console.error(error.message);
-      alert("Login Error");
+      console.error("Register Error:", error);
+      alert("Resister Error!");
     }
   };
   return (
     <StForm onSubmit={handleSubmit}>
+      <StH2>가입하세요!</StH2>
+      <StBox>
+        <StLabel htmlFor="nickname">닉네임</StLabel>
+        <StInput id="nickname" placeholder="nickname" name="nickname" />
+      </StBox>
       <StBox>
         <StLabel htmlFor="id">아이디</StLabel>
-        <StInput id="id" type="text" placeholder="id" name="id" />
+        <StInput id="id" placeholder="id" name="id" />
       </StBox>
       <StBox>
         <StLabel htmlFor="password">비밀번호</StLabel>
-        <StInput
-          id="password"
-          type="password"
-          placeholder="password"
-          name="password"
-        />
+        <StInput id="password" placeholder="password" name="password" />
       </StBox>
-      <StBtnBox>
-        <StBtn>로그인</StBtn>
-        <StBtn
-          type="button"
-          onClick={() => {
-            navigate("/register");
-          }}
-        >
-          회원가입
-        </StBtn>
-      </StBtnBox>
+      <StBtn>가입하기</StBtn>
     </StForm>
   );
 };
@@ -69,18 +57,21 @@ const StForm = styled.form`
   flex-direction: column;
   justify-content: center;
   gap: 20px;
-  border: 1px solid #5b5bf5;
+  border: 2px solid #5b5bf5;
   border-radius: 10px;
 `;
+const StH2 = styled.h2`
+  text-align: center;
+  font-size: 30px;
+  font-weight: 700;
+`;
+
 const StBox = styled.div`
   display: flex;
   flex-direction: column;
 `;
-const StBtnBox = styled.div`
-  display: flex;
-  flex-direction: column;
-`;
 const StLabel = styled.label``;
+
 const StInput = styled.input`
   padding: 0 10px;
   height: 20px;
@@ -88,8 +79,7 @@ const StInput = styled.input`
   border: 1px solid gray;
 `;
 const StBtn = styled.button`
-  height: 40px;
-  margin-top: 5%;
+  height: 10%;
   color: white;
   background-color: #5b5bf5;
   border: 1px solid white;
@@ -102,4 +92,4 @@ const StBtn = styled.button`
   }
 `;
 
-export default Login;
+export default Register;
