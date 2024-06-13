@@ -1,7 +1,8 @@
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import styled from "styled-components";
 import { useQuery } from "@tanstack/react-query";
 import { fetchExpense } from "../axios/expenseApi";
+import { useSelector } from "react-redux";
 
 const StUl = styled.ul`
   max-width: 1200px;
@@ -57,6 +58,8 @@ const StSpan = styled.span`
 `;
 
 export default function ExpenseList({ selectedMonth }) {
+  const navigate = useNavigate();
+  const user = useSelector((state) => state.user);
   const {
     data: expense,
     isPending,
@@ -78,10 +81,19 @@ export default function ExpenseList({ selectedMonth }) {
   return (
     <StUl>
       {monthList.map((el) => {
-        const { id, date, type, price, detail } = el;
+        const { id, date, type, price, detail, userId } = el;
         return (
           <StLi key={id}>
-            <Link style={linkStyle} to={"/edit/" + id}>
+            <Link
+              style={linkStyle}
+              to={"/edit/" + id}
+              onClick={(e) => {
+                if (user.userId !== userId) {
+                  alert("작성자가 다릅니다!");
+                  return e.preventDefault();
+                }
+              }}
+            >
               <StH3>{date}</StH3>
               <StContentDiv>
                 <StSpan>

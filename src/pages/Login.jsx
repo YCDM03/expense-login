@@ -1,9 +1,8 @@
-// import { useMutation } from "@tanstack/react-query";
-import { authApi } from "../axios/api";
 import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
-import { userLogin } from "../redux/slices/userSlice";
+import { userLogin, userReset } from "../redux/slices/userSlice";
+import { getUserToken } from "../axios/userApi";
 
 const Login = () => {
   const dispatch = useDispatch();
@@ -16,8 +15,8 @@ const Login = () => {
     const password = formData.get("password");
 
     try {
-      const response = await authApi.post("/login", { id, password });
-      const { accessToken, success } = response.data;
+      const { data } = await getUserToken(id, password);
+      const { accessToken, success } = data;
 
       if (success) {
         alert("Login Success!");

@@ -1,60 +1,51 @@
-import { authApi } from "../axios/api";
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import styled from "styled-components";
-import { updateUser } from "../redux/slices/userSlice";
+import { updateUser, userReset } from "../redux/slices/userSlice";
+import { getUserData, updateUserProfile } from "../axios/userApi";
+import { useNavigate } from "react-router-dom";
 
 const MyPage = () => {
+  const navigate = useNavigate();
   const dispatch = useDispatch();
   const user = useSelector((state) => state.user);
+  const token = localStorage.getItem("accessToken");
   const [nickname, setNickname] = useState("");
 
   const handleSubmit = (e) => {
     e.preventDefault();
-
     const formData = new FormData(e.target);
     const newNickname = formData.get("nickname");
     const newAvatar = formData.get("avatar");
-    const token = localStorage.getItem("accessToken");
 
     if (nickname === newNickname && newAvatar.name === "") {
       return;
     }
 
-    const updateProfile = async (formData) => {
-      const response = await authApi.patch("/profile", formData, {
-        headers: {
-          "Content-Type": "multipart/form-data",
-          Authorization: `Bearer ${token}`,
-        },
-      });
-      const { avatar, nickname, success } = response.data;
+    const updateProfile = async (formData, token) => {
+      const { data } = await updateUserProfile(formData, token);
+      const { avatar, nickname, success } = data;
       if (success) {
         dispatch(updateUser({ avatar: avatar ?? user.avatar, nickname }));
         alert("프로필이 업데이트 되었습니다!");
       }
     };
-    updateProfile(formData);
+    updateProfile(formData, token);
   };
 
   useEffect(() => {
-    const handleUser = async () => {
+    const handleUser = async (token) => {
       try {
-        const token = localStorage.getItem("accessToken");
-        const response = await authApi.get("/user", {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        });
+        const response = await getUserData(token);
 
         if (response.data.success) {
-          setNickname(() => response.data.nickname);
+          setNickname(response.data.nickname);
         }
       } catch (error) {
         console.error(error);
       }
     };
-    handleUser();
+    handleUser(token);
   }, []);
   return (
     <StForm onSubmit={handleSubmit}>

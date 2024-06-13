@@ -1,31 +1,30 @@
 import { useDispatch, useSelector } from "react-redux";
-import { authApi } from "../axios/api";
-import { loadUser } from "../redux/slices/userSlice";
+import { loadUser, userReset } from "../redux/slices/userSlice";
 import { useEffect } from "react";
 import styled from "styled-components";
+import { getUserData } from "../axios/userApi";
+import { useNavigate } from "react-router-dom";
 
 const UserInterface = () => {
+  const navigate = useNavigate();
   const dispatch = useDispatch();
   const user = useSelector((state) => state.user);
-  const token = user.accessToken;
+
   const nickname = user.nickname;
   const avatar = user.avatar;
 
   useEffect(() => {
     const handleOnload = async () => {
+      const token = user.accessToken;
       try {
-        const response = await authApi.get("/user", {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        });
-        const { id: userId, nickname, avatar, success } = response.data;
+        const { data } = await getUserData(token);
+        const { id: userId, nickname, avatar, success } = data;
 
         if (success) {
           dispatch(loadUser({ userId, nickname, avatar }));
         }
       } catch (error) {
-        console.error(error.message);
+        console.error(error);
       }
     };
     if (user.loginStatus) {

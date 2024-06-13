@@ -1,6 +1,6 @@
 import styled from "styled-components";
 import { useNavigate } from "react-router-dom";
-import { authApi } from "../axios/api";
+import { registUser } from "../axios/userApi";
 
 const Register = () => {
   const navigate = useNavigate();
@@ -13,12 +13,8 @@ const Register = () => {
     const password = formData.get("password");
 
     try {
-      const response = await authApi.post("/register", {
-        id,
-        password,
-        nickname,
-      });
-      const data = response.data;
+      const { data } = await registUser(id, password, nickname);
+
       if (data.success) {
         alert("success");
         navigate("/");
@@ -33,15 +29,25 @@ const Register = () => {
       <StH2>가입하세요!</StH2>
       <StBox>
         <StLabel htmlFor="nickname">닉네임</StLabel>
-        <StInput id="nickname" placeholder="nickname" name="nickname" />
+        <StInput
+          id="nickname"
+          type="text"
+          placeholder="nickname"
+          name="nickname"
+        />
       </StBox>
       <StBox>
         <StLabel htmlFor="id">아이디</StLabel>
-        <StInput id="id" placeholder="id" name="id" />
+        <StInput id="id" type="text" placeholder="id" name="id" />
       </StBox>
       <StBox>
         <StLabel htmlFor="password">비밀번호</StLabel>
-        <StInput id="password" placeholder="password" name="password" />
+        <StInput
+          id="password"
+          type="password"
+          placeholder="password"
+          name="password"
+        />
       </StBox>
       <StBtn>가입하기</StBtn>
     </StForm>

@@ -23,7 +23,7 @@ export default function ExpenseForm({
   selectedMonth,
 }) {
   const navigate = useNavigate();
-  const userName = useSelector((state) => state.user.nickname);
+  const user = useSelector((state) => state.user);
 
   const [valid, setValid] = useState({
     date: true,
@@ -98,7 +98,8 @@ export default function ExpenseForm({
           type,
           price: +price,
           detail,
-          userName,
+          userName: user.nickname,
+          userId: user.userId,
         })
       : AddMutate({
           id: uuidv4(),
@@ -106,7 +107,8 @@ export default function ExpenseForm({
           type,
           price: +price,
           detail,
-          userName,
+          userName: user.nickname,
+          userId: user.userId,
         });
 
     forEdit ? navigate("/") : e.target.reset();

@@ -14,6 +14,9 @@ const userSlice = createSlice({
   name: "user",
   initialState,
   reducers: {
+    userReset: (state, action) => {
+      state.loginStatus = false;
+    },
     userLogin: (state, action) => {
       localStorage.setItem("accessToken", action.payload);
       state.loginStatus = true;
@@ -35,6 +38,6 @@ const userSlice = createSlice({
   },
 });
 
-export const { userLogin, userLogout, loadUser, updateUser } =
+export const { userLogin, userLogout, loadUser, updateUser, userReset } =
   userSlice.actions;
 export default userSlice.reducer;
