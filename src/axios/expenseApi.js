@@ -1,17 +1,17 @@
-import api from "./api";
+import { jsonApi } from "./api";
 
 const fetchExpense = async () => {
-  const response = await api.get("/expense");
+  const response = await jsonApi.get("/expense");
   return response.data;
 };
 const addExpense = async (newExpense) => {
-  await api.post("/expense", newExpense);
+  await jsonApi.post("/expense", newExpense);
 };
 const deleteExpense = async (expenseId) => {
-  await api.delete("/expense/" + expenseId);
+  await jsonApi.delete("/expense/" + expenseId);
 };
 const editExpense = async (editExpense) => {
-  await api.patch("/expense/" + editExpense.id, editExpense);
+  await jsonApi.patch("/expense/" + editExpense.id, editExpense);
 };
 
 export { fetchExpense, addExpense, deleteExpense, editExpense };

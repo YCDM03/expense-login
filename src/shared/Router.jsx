@@ -4,6 +4,7 @@ import Home from "../pages/Home";
 import Login from "../pages/Login";
 import Resister from "../pages/Register";
 import Layout from "../components/layout/Layout";
+import MyPage from "../pages/MyPage";
 
 import { Provider, useSelector } from "react-redux";
 import store from "../redux/config/store";
@@ -25,6 +26,7 @@ const Router = () => {
         <Routes>
           <Route path="/" element={<Layout />}>
             <Route path="/" element={<PrivateRoute element={Home} />} />
+            <Route path="/mypage" element={<PrivateRoute element={MyPage} />} />
             <Route path="/edit/:id" element={<PrivateRoute element={Edit} />} />
             <Route path="/login" element={<PublicRoute element={Login} />} />
             <Route

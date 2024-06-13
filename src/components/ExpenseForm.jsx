@@ -91,7 +91,7 @@ export default function ExpenseForm({
     //
     forEdit
       ? EditMutate({ id, date, type, price: +price, detail })
-      : AddMutate({ id: uuidv4(), date, type, price, detail });
+      : AddMutate({ id: uuidv4(), date, type, price: +price, detail });
 
     forEdit ? navigate("/") : e.target.reset();
   };

@@ -1,9 +1,8 @@
 import styled from "styled-components";
 import { v4 as uuidv4 } from "uuid";
-import axios from "axios";
 import { useNavigate } from "react-router-dom";
+import { authApi } from "../axios/api";
 
-// registerMutate(id);
 const Register = () => {
   const navigate = useNavigate();
 
@@ -15,10 +14,11 @@ const Register = () => {
     const password = formData.get("password");
 
     try {
-      const response = await axios.post(
-        "https://moneyfulpublicpolicy.co.kr/register",
-        { id, password, nickname }
-      );
+      const response = await authApi.post("/register", {
+        id,
+        password,
+        nickname,
+      });
       const data = response.data;
       if (data.success) {
         alert("success");

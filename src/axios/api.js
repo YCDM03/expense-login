@@ -1,7 +1,10 @@
 import axios from "axios";
 
-const api = axios.create({
+const jsonApi = axios.create({
   baseURL: "http://localhost:4000",
 });
+const authApi = axios.create({
+  baseURL: "https://moneyfulpublicpolicy.co.kr",
+});
 
-export default api;
+export { jsonApi, authApi };

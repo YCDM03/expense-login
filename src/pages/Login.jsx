@@ -1,5 +1,5 @@
 // import { useMutation } from "@tanstack/react-query";
-import axios from "axios";
+import { authApi } from "../axios/api";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
@@ -16,10 +16,7 @@ const Login = () => {
     const password = formData.get("password");
 
     try {
-      const response = await axios.post(
-        "https://moneyfulpublicpolicy.co.kr/login",
-        { id, password }
-      );
+      const response = await authApi.post("/login", { id, password });
       const data = response.data;
       if (data.success) {
         alert("Login Success!");

@@ -10,14 +10,29 @@ const Header = () => {
 
   return (
     <StHeader>
-      <StBtn
-        onClick={() => {
-          navigate("/");
-        }}
-        $home={true}
-      >
-        HOME
-      </StBtn>
+      <StBox>
+        <StBtn
+          onClick={() => {
+            navigate("/");
+          }}
+          $category={true}
+        >
+          HOME
+        </StBtn>
+        {loginStatus ? (
+          <StBtn
+            onClick={() => {
+              navigate("/mypage");
+            }}
+            $category={true}
+          >
+            MyPage
+          </StBtn>
+        ) : (
+          ""
+        )}
+      </StBox>
+
       {loginStatus ? (
         <StBtn
           onClick={() => {
@@ -48,15 +63,18 @@ const StHeader = styled.header`
   display: flex;
   justify-content: space-between;
 `;
+const StBox = styled.div`
+  display: flex;
+`;
 const StBtn = styled.button`
   width: 100px;
   min-width: 100px;
-  height: ${(props) => (props.$home ? "100%" : "30px")};
-  margin: ${(props) => (props.$home ? "0" : "auto 10px")};
+  height: ${(props) => (props.$category ? "100%" : "30px")};
+  margin: ${(props) => (props.$category ? "0" : "auto 10px")};
   color: white;
   background-color: #5b5bf5;
-  border: 1px solid white;
-  border-radius: 5px;
+  border: ${(props) => (props.$category ? "0" : "1px")} solid white;
+  border-radius: ${(props) => (props.$category ? "0" : "5px")};
   &:hover {
     background-color: #373797;
   }
