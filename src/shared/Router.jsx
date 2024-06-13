@@ -6,36 +6,39 @@ import Resister from "../pages/Register";
 import Layout from "../components/layout/Layout";
 import MyPage from "../pages/MyPage";
 
-import { Provider, useSelector } from "react-redux";
-import store from "../redux/config/store";
+import { useSelector } from "react-redux";
 
 const Router = () => {
-  const PrivateRoute = ({ element: Element, ...rest }) => {
-    const loginStatus = useSelector((state) => state.login);
-    return loginStatus ? <Element {...rest} /> : <Navigate to="/login" />;
+  const PrivateRoute = ({ element }) => {
+    const loginStatus = useSelector((state) => state.user.loginStatus);
+    return loginStatus ? element : <Navigate to="/login" />;
   };
 
-  const PublicRoute = ({ element: Element, ...rest }) => {
-    const loginStatus = useSelector((state) => state.login);
-    return !loginStatus ? <Element {...rest} /> : <Navigate to="/" />;
+  const PublicRoute = ({ element }) => {
+    const loginStatus = useSelector((state) => state.user.loginStatus);
+    return !loginStatus ? element : <Navigate to="/" />;
   };
 
   return (
     <BrowserRouter>
-      <Provider store={store}>
-        <Routes>
-          <Route path="/" element={<Layout />}>
-            <Route path="/" element={<PrivateRoute element={Home} />} />
-            <Route path="/mypage" element={<PrivateRoute element={MyPage} />} />
-            <Route path="/edit/:id" element={<PrivateRoute element={Edit} />} />
-            <Route path="/login" element={<PublicRoute element={Login} />} />
-            <Route
-              path="/register"
-              element={<PublicRoute element={Resister} />}
-            />
-          </Route>
-        </Routes>
-      </Provider>
+      <Routes>
+        <Route path="/" element={<Layout />}>
+          <Route path="/" element={<PrivateRoute element={<Home />} />} />
+          <Route
+            path="/mypage"
+            element={<PrivateRoute element={<MyPage />} />}
+          />
+          <Route
+            path="/edit/:id"
+            element={<PrivateRoute element={<Edit />} />}
+          />
+          <Route path="/login" element={<PublicRoute element={<Login />} />} />
+          <Route
+            path="/register"
+            element={<PublicRoute element={<Resister />} />}
+          />
+        </Route>
+      </Routes>
     </BrowserRouter>
   );
 };

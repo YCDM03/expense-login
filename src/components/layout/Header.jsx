@@ -1,12 +1,13 @@
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
-import { logout } from "../../redux/slices/loginSlice";
+import { userLogout } from "../../redux/slices/userSlice";
+import UserInterface from "../UserInterface";
 
 const Header = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
-  const loginStatus = useSelector((state) => state.login);
+  const user = useSelector((state) => state.user);
 
   return (
     <StHeader>
@@ -19,7 +20,7 @@ const Header = () => {
         >
           HOME
         </StBtn>
-        {loginStatus ? (
+        {user.loginStatus ? (
           <StBtn
             onClick={() => {
               navigate("/mypage");
@@ -32,13 +33,13 @@ const Header = () => {
           ""
         )}
       </StBox>
-
-      {loginStatus ? (
+      {user.loginStatus ? <UserInterface /> : ""}
+      {user.loginStatus ? (
         <StBtn
           onClick={() => {
             if (confirm("로그아웃 하시겠습니까?")) {
               alert("you are now logged out!");
-              dispatch(logout());
+              dispatch(userLogout());
             }
           }}
         >

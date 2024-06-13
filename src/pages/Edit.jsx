@@ -43,7 +43,7 @@ export default function Edit() {
     return <div>데이터 조회중 오류가 발생했습니다!</div>;
   }
   return (
-    <ExpenseForm forEdit={true} targetItem={targetItem} id={params.id}>
+    <ExpenseForm forEdit={true} targetItem={targetItem} expenseId={params.id}>
       <Link to={"/"} style={linkStyle}>
         <StButton type="button">메인으로</StButton>
       </Link>

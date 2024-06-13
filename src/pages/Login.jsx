@@ -1,9 +1,9 @@
 // import { useMutation } from "@tanstack/react-query";
 import { authApi } from "../axios/api";
-import { useDispatch, useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
-import { login } from "../redux/slices/loginSlice";
+import { userLogin } from "../redux/slices/userSlice";
 
 const Login = () => {
   const dispatch = useDispatch();
@@ -17,17 +17,18 @@ const Login = () => {
 
     try {
       const response = await authApi.post("/login", { id, password });
-      const data = response.data;
-      if (data.success) {
+      const { accessToken, success } = response.data;
+
+      if (success) {
         alert("Login Success!");
-        dispatch(login(data.accessToken));
-        navigate("/");
+        dispatch(userLogin(accessToken));
       }
     } catch (error) {
       console.error(error.message);
       alert("Login Error");
     }
   };
+
   return (
     <StForm onSubmit={handleSubmit}>
       <StBox>

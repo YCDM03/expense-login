@@ -10,6 +10,7 @@ import {
 import { useNavigate } from "react-router-dom";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { addExpense, editExpense } from "../axios/expenseApi";
+import { useSelector } from "react-redux";
 
 const expenseKoNameArr = ["날짜", "지출 항목", "지출 금액", "지출 내용"];
 const expenseEnNameArr = ["date", "type", "price", "detail"];
@@ -17,11 +18,12 @@ const expenseEnNameArr = ["date", "type", "price", "detail"];
 export default function ExpenseForm({
   forEdit,
   targetItem = null,
-  id,
+  expenseId,
   children,
   selectedMonth,
 }) {
   const navigate = useNavigate();
+  const userName = useSelector((state) => state.user.nickname);
 
   const [valid, setValid] = useState({
     date: true,
@@ -90,8 +92,22 @@ export default function ExpenseForm({
     }
     //
     forEdit
-      ? EditMutate({ id, date, type, price: +price, detail })
-      : AddMutate({ id: uuidv4(), date, type, price: +price, detail });
+      ? EditMutate({
+          id: expenseId,
+          date,
+          type,
+          price: +price,
+          detail,
+          userName,
+        })
+      : AddMutate({
+          id: uuidv4(),
+          date,
+          type,
+          price: +price,
+          detail,
+          userName,
+        });
 
     forEdit ? navigate("/") : e.target.reset();
   };

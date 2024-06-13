@@ -1,9 +1,41 @@
 import { authApi } from "../axios/api";
 import { useEffect, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
 import styled from "styled-components";
+import { updateUser } from "../redux/slices/userSlice";
 
 const MyPage = () => {
+  const dispatch = useDispatch();
+  const user = useSelector((state) => state.user);
   const [nickname, setNickname] = useState("");
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+
+    const formData = new FormData(e.target);
+    const newNickname = formData.get("nickname");
+    const newAvatar = formData.get("avatar");
+    const token = localStorage.getItem("accessToken");
+
+    if (nickname === newNickname && newAvatar.name === "") {
+      return;
+    }
+
+    const updateProfile = async (formData) => {
+      const response = await authApi.patch("/profile", formData, {
+        headers: {
+          "Content-Type": "multipart/form-data",
+          Authorization: `Bearer ${token}`,
+        },
+      });
+      const { avatar, nickname, success } = response.data;
+      if (success) {
+        dispatch(updateUser({ avatar: avatar ?? user.avatar, nickname }));
+        alert("프로필이 업데이트 되었습니다!");
+      }
+    };
+    updateProfile(formData);
+  };
 
   useEffect(() => {
     const handleUser = async () => {
@@ -14,19 +46,18 @@ const MyPage = () => {
             Authorization: `Bearer ${token}`,
           },
         });
+
         if (response.data.success) {
-          setNickname((prev) => response.data.nickname);
+          setNickname(() => response.data.nickname);
         }
       } catch (error) {
-        console.error("User Error:", error);
-        // alert("User Error!");
+        console.error(error);
       }
     };
     handleUser();
   }, []);
-
   return (
-    <StForm>
+    <StForm onSubmit={handleSubmit}>
       <StH2>프로필 수정</StH2>
       <StBox>
         <StLabel htmlFor="nickname">닉네임</StLabel>
@@ -39,8 +70,13 @@ const MyPage = () => {
         />
       </StBox>
       <StBox>
-        <StLabel htmlFor="avatar">프로필 사진 업로드</StLabel>
-        <input id="avatar" type="file" placeholder="avatar" name="avatar" />
+        <StLabel htmlFor="avatar">프로필 사진</StLabel>
+        <input
+          id="avatar"
+          type="file"
+          name="avatar"
+          accept="image/png, image/jpeg"
+        />
       </StBox>
       <StBtn>프로필 업데이트</StBtn>
     </StForm>
