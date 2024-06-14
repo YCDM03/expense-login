@@ -1,7 +1,7 @@
 import axios from "axios";
 
 const jsonApi = axios.create({
-  baseURL: "https://selective-creative-plot.glitch.me",
+  baseURL: "https://selective-creative-plot.glitch.me/",
 });
 
 const authApi = axios.create({
