@@ -1,0 +1,8 @@
+{
+  "rewrites": [
+    {
+      "source": "/mypage",
+      "destination": "/https://expense-login.vercel.app/mypage"
+    }
+  ]
+}
